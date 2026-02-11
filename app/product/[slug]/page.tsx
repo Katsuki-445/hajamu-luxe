@@ -10,6 +10,7 @@ type SanityProduct = {
   name: string;
   slug: { current: string };
   price: number;
+  image?: any;
   images?: { asset?: { url: string } }[];
   description?: string;
   collection?: { title?: string };
@@ -18,7 +19,7 @@ type SanityProduct = {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = await client.fetch(
-    groq`*[_type == "product" && slug.current == $slug][0]{name, description, images}`,
+    groq`*[_type == "product" && slug.current == $slug][0]{name, description, image, images}`,
     { slug }
   );
 
@@ -28,7 +29,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
-  const imageUrl = product.images?.[0] ? urlFor(product.images[0]) : null;
+  const mainImage = product.images?.[0] || product.image;
+  const imageUrl = mainImage ? urlFor(mainImage) : null;
 
   return {
     title: `${product.name} | HAJAMU LUXE`,
@@ -50,7 +52,7 @@ export default async function ProductDetail({
   let data: SanityProduct | null = null;
   try {
     data = await client.fetch(
-      groq`*[_type == "product" && slug.current == $slug][0]{_id,name,slug,price,images,description,collection->{"title": title}}`,
+      groq`*[_type == "product" && slug.current == $slug][0]{_id,name,slug,price,image,images,description,collection->{"title": title}}`,
       { slug }
     );
   } catch (error) {
@@ -70,12 +72,13 @@ export default async function ProductDetail({
     );
   }
 
+  const mainImage = data.images?.[0] || data.image;
   const product = {
     id: data._id,
     name: data.name,
     title: data.name,
     description: data.description || "",
-    image: data.images?.[0] ? urlFor(data.images[0]) : "",
+    image: mainImage ? urlFor(mainImage) : "",
     price: data.price,
     category: data.collection?.title || "Collection",
   };

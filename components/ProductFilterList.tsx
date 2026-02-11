@@ -21,6 +21,7 @@ type Product = {
   slug: { current: string };
   price: number;
   description?: string;
+  image?: any;
   images?: { asset?: { url: string } }[];
   collection?: { _id: string };
 };
@@ -140,7 +141,7 @@ export default function ProductFilterList({ collections, products }: ProductFilt
                         <Link href={`/product/${p.slug?.current}`} className="group block cursor-pointer">
                           <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-gray-50 mb-4 shadow-sm group-hover:shadow-md transition-all duration-300">
                             <Image
-                              src={p.images?.[0] ? urlFor(p.images?.[0]) || "" : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='600'><rect width='100%' height='100%' fill='%23f3f4f6'/></svg>"}
+                              src={(p.images?.[0] || p.image) ? urlFor(p.images?.[0] || p.image) || "" : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='600'><rect width='100%' height='100%' fill='%23f3f4f6'/></svg>"}
                               alt={p.name}
                               fill
                               className="object-cover object-center group-hover:scale-105 transition-transform duration-700"

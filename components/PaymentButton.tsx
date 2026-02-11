@@ -102,12 +102,10 @@ export default function PaymentButton({
         ref: finalReference || `hl-${Date.now()}`,
         metadata,
         callback: function (response: unknown) {
-          console.log("Paystack Success:", response);
           setLoading(false);
           if (onSuccess) onSuccess(response);
         },
         onClose: function () {
-          console.log("Paystack Closed");
           setLoading(false);
           if (onClose) onClose();
         },

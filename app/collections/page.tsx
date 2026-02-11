@@ -16,6 +16,7 @@ type Product = {
   slug: { current: string };
   price: number;
   description?: string;
+  image?: any;
   images?: { asset?: { url: string } }[];
   collection?: { _id: string };
 };
@@ -28,7 +29,7 @@ export default async function Collections() {
       groq`*[_type == "collection"]{_id,title,slug,image}`
     );
     products = await client.fetch(
-      groq`*[_type == "product"]{_id,name,slug,price,description,images,collection->{_id}}`
+      groq`*[_type == "product"]{_id,name,slug,price,description,image,images,collection->{_id}}`
     );
   } catch {
     collections = [];

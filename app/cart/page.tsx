@@ -2,29 +2,17 @@
 
 import Header from "@/components/Header";
 import Image from "next/image";
-import PaymentButton from "@/components/PaymentButton";
 import { useCart } from "@/components/CartContext";
 import Link from "next/link";
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, clearCart, hasMounted } = useCart();
+  const { items, updateQuantity, removeFromCart, hasMounted } = useCart();
   const totalGhs = hasMounted && items.length
     ? items.reduce((sum, i) => {
         const num = Number(i.product.price.replace(/[^0-9.]/g, ""));
         return sum + num * i.quantity;
       }, 0)
     : 0;
-  const componentProps = {
-    email: "customer@example.com",
-    amount: Math.round(totalGhs * 100),
-    publicKey: "pk_test_72b7870635dfc7ff14170832c608d445d6f2f5d1",
-    text: "Buy Now",
-    currency: "GHS",
-    onSuccess: () => {
-      clearCart();
-    },
-    onClose: () => {},
-  };
 
   return (
     <main className="min-h-screen bg-white">

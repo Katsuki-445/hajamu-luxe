@@ -56,10 +56,10 @@ export default function SupportClient({ whatsappSettings }: SupportClientProps) 
 
     emailjs
       .sendForm(
-        'service_ay17v5o',
-        'template_xw1c5j2',
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '',
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '',
         form.current,
-        'ifaxI-Hh_2zU7yBKA'
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ''
       )
       .then(
         () => {
